@@ -1,7 +1,7 @@
 #!/usr/loal/bin/ruby
 
 require 'dogapi'
-require 'wiringpi2'
+require 'pi_piper'
 
 API_KEY=ENV['DD_API_KEY']
 APP_KEY=ENV['DD_APP_KEY']
@@ -54,24 +54,20 @@ class SimpleLogger
   end
 end
 
-
-io = WiringPi::GPIO.new do |gpio|
-  gpio.pin_mode(2, WiringPi::OUTPUT)
-end
+pin = PiPiper::Pin::new(:pin => PIN_NUMBER, :direction => :out)
 
 logger = SimpleLogger.new(SimpleLogger::MODE[:DETAIL])
 
 loop do
   alart_num = dog.get_all_monitors(:group_states => ['alert'])[1].select do |item|
-    pp item
     item['overall_state'] != 'OK'
   end.size
 
   if alart_num > 0
-    io.digital_write(PIN_NUMBER, WiringPi::HIGH)
+    pin.off
     logger.log('on')
   else
-    io.digital_write(PIN_NUMBER, WiringPi::LOW)
+    pin.on
     logger.log('off')
   end
 

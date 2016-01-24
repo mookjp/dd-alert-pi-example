@@ -3,7 +3,7 @@ source "https://rubygems.org"
 
 # gem "rails"
 gem "dogapi"
-gem "wiringpi2"
+gem "pi_piper"
 
 group :development do
   gem "pry"
