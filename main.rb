@@ -60,7 +60,7 @@ logger = SimpleLogger.new(SimpleLogger::MODE[:DETAIL])
 
 loop do
   alart_num = dog.get_all_monitors(:group_states => ['alert'])[1].select do |item|
-    item['overall_state'] != 'OK'
+    item['overall_state'] == 'Alert'
   end.size
 
   if alart_num > 0
